@@ -28,6 +28,8 @@ public class SwiftAppTrackingTransparencyPlugin: NSObject, FlutterPlugin {
   private func getTrackingAuthorizationStatus(result: @escaping FlutterResult) {
     if #available(iOS 14, *) {
         result(Int(ATTrackingManager.trackingAuthorizationStatus.rawValue))
+    } else if #available(iOS 15, *) {
+        result(Int(ATTrackingManager.trackingAuthorizationStatus.rawValue))
     } else {
         // return notSupported
         result(Int(4))
@@ -42,6 +44,10 @@ public class SwiftAppTrackingTransparencyPlugin: NSObject, FlutterPlugin {
   */
   private func requestTrackingAuthorization(result: @escaping FlutterResult) {
     if #available(iOS 14, *) {
+        ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in
+            result(Int(status.rawValue))
+        })
+    } else if #available(iOS 15, *) {
         ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in
             result(Int(status.rawValue))
         })
